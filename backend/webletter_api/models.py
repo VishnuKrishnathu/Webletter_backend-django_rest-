@@ -3,10 +3,12 @@ from django.db import models
 # Create your models here.
 
 def profilePictureUpload(instance, filename):
-    return '/'.join(['pp',instance.emailid, filename])
+    directory = instance.firstname + str(instance.id)
+    return '/'.join(['pp',directory, filename])
 
 def postsPictureUpload(instance, filename):
-    return '/'.join(['pp', instance.posts.emailid, filename])
+    directory = instance.posts.firstname + str(instance.posts.id)
+    return '/'.join(['pp', directory, filename])
 
 
 class BlogUsers(models.Model):
