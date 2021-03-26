@@ -16,10 +16,11 @@ class BlogUsers(models.Model):
     lastname = models.CharField(max_length = 30)
     phonenumber = models.BigIntegerField(null=True)
     emailid = models.EmailField(max_length= 200, null = True)
-    profilepicture = models.ImageField(upload_to = profilePictureUpload, null= True, blank=True)
+    profilepicture = models.ImageField(upload_to = profilePictureUpload, null= True, blank=True, default= "/pp/default/blank.jpeg")
+
 
     def __str__(self):
-        return self.firstname    
+        return self.firstname
 
 class Posts(models.Model):
     posts = models.ForeignKey('BlogUsers',null=True, on_delete=models.SET_NULL)

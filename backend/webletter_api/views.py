@@ -16,7 +16,7 @@ def apiOverview(request):
         serializer = UserSerializer(data = request.data)
         if serializer.is_valid():
             serializer.save()
-        return Response(serializer.data)
+            return Response(serializer.data)
 
     else:
         users = BlogUsers.objects.all()
@@ -42,7 +42,7 @@ def apiPostsView(request):
 
 
 @api_view(['GET', 'POST'])
-def apiUserFetch(request, pk):
+def apiSpecificUserFetch(request, pk):
     if request.method == 'POST':
         user = BlogUsers.objects.get(id=pk)
         serializer = UserSerializer(instance = user, data = request.data)
