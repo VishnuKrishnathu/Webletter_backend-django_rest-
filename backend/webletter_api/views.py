@@ -1,16 +1,18 @@
 from django.shortcuts import render
-from django.http import JsonResponse, HttpResponse
+from django.http import  HttpResponse
 
 
 from rest_framework import status
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view,authentication_classes
 from rest_framework.response import Response
-from .serializer import UserSerializer, PostsSerializer
+from .serializer import *
 from .models import *
+from rest_framework.authentication import TokenAuthentication
 
 
 # Create your views here.
 @api_view(['GET', 'POST'])
+@authentication_classes([TokenAuthentication])
 def apiOverview(request):
     if request.method == 'POST':
         serializer = UserSerializer(data = request.data)
@@ -29,6 +31,7 @@ def homepage(request):
 
 
 @api_view([ 'GET', 'POST' ])
+@authentication_classes([TokenAuthentication])
 def apiPostsView(request):
     if request.method == 'POST':
         serializer = PostsSerializer(data = request.data)
@@ -42,6 +45,7 @@ def apiPostsView(request):
 
 
 @api_view(['GET', 'POST'])
+@authentication_classes([TokenAuthentication])
 def apiSpecificUserFetch(request, pk):
     if request.method == 'POST':
         user = BlogUsers.objects.get(id=pk)
@@ -54,4 +58,11 @@ def apiSpecificUserFetch(request, pk):
         users = BlogUsers.objects.get(id=pk)
         serializer = UserSerializer(users, many=False)
         return Response(serializer.data)
+
+@api_view(['GET'])
+@authentication_classes([TokenAuthentication])
+def apiSpecificPostFetch(request,pk):
+    post = Posts.objects.get(id=pk)
+    serializer = PostsSerializer(post, many=False)
+    return Response(serializer.data)
 
