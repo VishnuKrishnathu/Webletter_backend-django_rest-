@@ -12,7 +12,8 @@ from rest_framework.authentication import TokenAuthentication
 
 # Create your views here.
 @api_view(['GET', 'POST'])
-#@authentication_classes([TokenAuthentication])
+@authentication_classes([TokenAuthentication])
+@permission_classes([IsAuthenticated])
 def apiOverview(request):
     if request.method == 'POST':
         serializer = UserSerializer(data = request.data)
@@ -33,7 +34,8 @@ def homepage(request):
 
 
 @api_view([ 'GET', 'POST' ])
-#@authentication_classes([TokenAuthentication])
+@authentication_classes([TokenAuthentication])
+@permission_classes([IsAuthenticated])
 def apiPostsView(request):
     if request.method == 'POST':
         serializer = PostsSerializer(data = request.data)
@@ -47,7 +49,8 @@ def apiPostsView(request):
 
 
 @api_view(['GET', 'POST'])
-#@authentication_classes([TokenAuthentication])
+@authentication_classes([TokenAuthentication])
+@permission_classes([IsAuthenticated])
 def apiSpecificUserFetch(request, pk):
     if request.method == 'POST':
         user = BlogUsers.objects.get(id=pk)
@@ -62,7 +65,8 @@ def apiSpecificUserFetch(request, pk):
         return Response(serializer.data)
 
 @api_view(['GET'])
-#@authentication_classes([TokenAuthentication])
+@authentication_classes([TokenAuthentication])
+@permission_classes([IsAuthenticated])
 def apiSpecificPostFetch(request,pk):
     post = Posts.objects.get(id=pk)
     serializer = PostsSerializer(post, many=False)

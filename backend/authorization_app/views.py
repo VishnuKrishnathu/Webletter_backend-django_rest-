@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, auth
 
 
 from rest_framework import status
@@ -15,18 +15,13 @@ from webletter_api.models import *
 @api_view([ 'POST'])
 def loginData(request):
     if request.method == 'POST':
-        try:
-            username = User.objects.get(username = request.data['username'])
-            serializer = CredentialsSerializer( username, many=False)
-            if (serializer.data['password']== request.data['password']):
-                return Response(serializer.data)
-            else:
-                return Response({'password': False})
-        except:
-            return Response({
-                'username': False,
-                'password': False
-            })
+        user = auth.authenticate(username = request.data['username'], password = request.data['password'])
+        if user:
+            user_details = UsernameStorage.objects.get(username = request.data['username'])
+            serializer = UsernameSerializer(user_details, many=False)
+            return Response(serializer.data)
+        else: 
+            return Response({"username": False})
 @api_view(['POST'])
 def registerUser(request):
    if request.method=='POST':
